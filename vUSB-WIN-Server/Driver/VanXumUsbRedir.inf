@@ -1,0 +1,53 @@
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=zhangzhiyong
+DriverVer=01/28/2019,1.0.0
+CatalogFile=VanXumUsbRedir.cat
+[Manufacturer]
+%StdMfg%=Standard
+%StdMfg%=Standard,NTamd64
+[Standard]
+%DeviceDesc%=USBIP_Device, root\VanXumUsbRedir
+[Standard.NTamd64]
+%DeviceDesc%=USBIP_Device, root\VanXumUsbRedir
+[DestinationDirs]
+DefaultDestDir = 12
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+[SourceDisksFiles]
+VanXumUsbRedir_x86.sys  = 1,,
+VanXumUsbRedir_x64.sys  = 1,,
+[Drivers_Dir_x86]
+VanXumUsbRedir.sys,VanXumUsbRedir_x86.sys
+[Drivers_Dir_x64]
+VanXumUsbRedir.sys,VanXumUsbRedir_x64.sys
+[USBIP_Device]
+CopyFiles=Drivers_Dir_x86
+[USBIP_Device.NTamd64]
+CopyFiles=Drivers_Dir_x64
+[USBIP_Device.NT.HW]
+AddReg=USBIP_Device_AddReg
+[USBIP_Device.NTamd64.HW]
+AddReg=USBIP_Device_AddReg
+[USBIP_Device_AddReg]                            
+HKR,,DeviceCharacteristics,0x10001,0x0100       
+[USBIP_Device.Services]
+AddService = VanXumUsbRedir,%SPSVCINST_ASSOCSERVICE%, USBIP_Service_Inst
+[USBIP_Device.NTamd64.Services]
+AddService = VanXumUsbRedir,%SPSVCINST_ASSOCSERVICE%, USBIP_Service_Inst
+[USBIP_Service_Inst]
+DisplayName    = %ServiceDesc%
+ServiceType    = 1               
+StartType      = 3              
+ErrorControl   = 1              
+ServiceBinary  = %12%\VanXumUsbRedir.sys
+LoadOrderGroup = Extended Base
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+StdMfg = "VanXumUsbRedir Project"
+DiskId1 = "VanXumUsbRedir Enumerator Disk"
+DeviceDesc = "VanXumUsbRedir Enumerator"
+ServiceDesc = "VanXumUsbRedir Enumerator Service"
+

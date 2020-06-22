@@ -1,0 +1,2 @@
+#define PACKAGE_STRING "ipusb v0.1"
+#define IPUSB_VERSION 0x00000111

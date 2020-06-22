@@ -1,0 +1,7 @@
+config VANXUM_USBREDIR
+	tristate "VanXum Usb Redirect client driver"
+	depends on USB && NET
+	default Y
+	---help---
+	  This enables VanXum ZC support Usb redirect 
+

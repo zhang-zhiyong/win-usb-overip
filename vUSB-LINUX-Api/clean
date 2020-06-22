@@ -1,0 +1,12 @@
+#!/bin/bash
+
+export PROJ_ROOT=$(pwd)
+export OUT_DIR=$(pwd)/out
+
+make clean -C usbredirapi/
+if [ "$?" != "0" ]; then
+        exit 1
+fi
+
+rm -rf out
+

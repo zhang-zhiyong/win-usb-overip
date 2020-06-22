@@ -1,0 +1,42 @@
+#!/bin/bash
+
+export PROJ_ROOT=$(pwd)
+export OUT_DIR=$(pwd)/out
+export PATH=$(pwd)/toolchain/aarch64-rockchip-linux-gnu/usr/bin:$PATH
+
+rm -rf out
+mkdir out
+chmod a+w out
+
+mkdir -p out/for_deploy/lib
+chmod a+w out/for_deploy/lib
+
+mkdir -p out/for_deploy/bin
+chmod a+w out/for_deploy/bin
+
+mkdir -p out/for_deploy/include
+chmod a+w out/for_deploy/include
+
+mkdir -p out/for_build/inc
+chmod a+w out/for_build/inc
+
+mkdir -p out/for_build/lib
+chmod a+w out/for_build/lib
+
+mkdir -p out/for_build/doc
+chmod a+w out/for_build/doc
+
+make -C usbredirapi/
+if [ "$?" != "0" ]; then
+        exit 1
+fi
+
+cp usbredirapi/usbredirapi.h out/for_build/inc
+cp usbredirapi/libusbredirapi.so out/for_build/lib
+cp usbredirapi/readme.txt  out/for_build/doc
+
+cp usbredirapi/usbredirapi.h out/for_deploy/include
+cp usbredirapi/libusbredirapi.so out/for_deploy/lib
+cp usbredirapi/usbredirapi_test out/for_deploy/bin
+
+

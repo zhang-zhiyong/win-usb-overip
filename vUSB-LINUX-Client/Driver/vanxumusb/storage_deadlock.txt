@@ -1,0 +1,201 @@
+Jan 15 16:56:03 lappi kernel: [  150.478063] connection closed
+Jan 15 16:56:03 lappi kernel: [  150.478419] usb 5-1: USB disconnect, device number 2
+Jan 15 16:56:09 lappi kernel: [  155.937740] 
+Jan 15 16:56:09 lappi kernel: [  155.937752] =========================================================
+Jan 15 16:56:09 lappi kernel: [  155.937757] [ INFO: possible irq lock inversion dependency detected ]
+Jan 15 16:56:09 lappi kernel: [  155.937765] 3.7.2+ #17 Tainted: G           O
+Jan 15 16:56:09 lappi kernel: [  155.937769] ---------------------------------------------------------
+Jan 15 16:56:09 lappi kernel: [  155.937774] scsi_eh_6/5034 just changed the state of lock:
+Jan 15 16:56:09 lappi kernel: [  155.937779]  (&(shost->host_lock)->rlock){+.-...}, at: [<ffffffffa04e58c0>] command_abort+0x21/0x86 [usb_storage]
+Jan 15 16:56:09 lappi kernel: [  155.937805] but this lock was taken by another, HARDIRQ-safe lock in the past:
+Jan 15 16:56:09 lappi kernel: [  155.937809]  (&(&host->lock)->rlock){-.-...}
+Jan 15 16:56:09 lappi kernel: [  155.937809] 
+Jan 15 16:56:09 lappi kernel: [  155.937809] and interrupts could create inverse lock ordering between them.
+Jan 15 16:56:09 lappi kernel: [  155.937809] 
+Jan 15 16:56:09 lappi kernel: [  155.937819] 
+Jan 15 16:56:09 lappi kernel: [  155.937819] other info that might help us debug this:
+Jan 15 16:56:09 lappi kernel: [  155.937824]  Possible interrupt unsafe locking scenario:
+Jan 15 16:56:09 lappi kernel: [  155.937824] 
+Jan 15 16:56:09 lappi kernel: [  155.937829]        CPU0                    CPU1
+Jan 15 16:56:09 lappi kernel: [  155.937833]        ----                    ----
+Jan 15 16:56:09 lappi kernel: [  155.937836]   lock(&(shost->host_lock)->rlock);
+Jan 15 16:56:09 lappi kernel: [  155.937844]                                local_irq_disable();
+Jan 15 16:56:09 lappi kernel: [  155.937847]                                lock(&(&host->lock)->rlock);
+Jan 15 16:56:09 lappi kernel: [  155.937854]                                lock(&(shost->host_lock)->rlock);
+Jan 15 16:56:09 lappi kernel: [  155.937861]   <Interrupt>
+Jan 15 16:56:09 lappi kernel: [  155.937864]     lock(&(&host->lock)->rlock);
+Jan 15 16:56:09 lappi kernel: [  155.937870] 
+Jan 15 16:56:09 lappi kernel: [  155.937870]  *** DEADLOCK ***
+Jan 15 16:56:09 lappi kernel: [  155.937870] 
+Jan 15 16:56:09 lappi kernel: [  155.937878] 1 lock held by scsi_eh_6/5034:
+Jan 15 16:56:09 lappi kernel: [  155.937882]  #0:  (&(shost->host_lock)->rlock){+.-...}, at: [<ffffffffa04e58c0>] command_abort+0x21/0x86 [usb_storage]
+Jan 15 16:56:09 lappi kernel: [  155.937900] 
+Jan 15 16:56:09 lappi kernel: [  155.937900] the shortest dependencies between 2nd lock and 1st lock:
+Jan 15 16:56:09 lappi kernel: [  155.937938]  -> (&(&host->lock)->rlock){-.-...} ops: 18581 {
+Jan 15 16:56:09 lappi kernel: [  155.937951]     IN-HARDIRQ-W at:
+Jan 15 16:56:09 lappi kernel: [  155.937957]                       [<ffffffff8108c72e>] __lock_acquire+0x2b4/0xe6d
+Jan 15 16:56:09 lappi kernel: [  155.937968]                       [<ffffffff8108d7b1>] lock_acquire+0x9f/0x112
+Jan 15 16:56:09 lappi kernel: [  155.937976]                       [<ffffffff813bfbb8>] _raw_spin_lock+0x36/0x6b
+Jan 15 16:56:09 lappi kernel: [  155.937985]                       [<ffffffffa003526d>] ahci_interrupt+0x4b/0x59f [libahci]
+Jan 15 16:56:09 lappi kernel: [  155.938001]                       [<ffffffff810ba834>] handle_irq_event_percpu+0x40/0x1c7
+Jan 15 16:56:09 lappi kernel: [  155.938013]                       [<ffffffff810baa02>] handle_irq_event+0x47/0x69
+Jan 15 16:56:09 lappi kernel: [  155.938022]                       [<ffffffff810bd23c>] handle_edge_irq+0xb0/0xdd
+Jan 15 16:56:09 lappi kernel: [  155.938030]                       [<ffffffff81010d29>] handle_irq+0x128/0x135
+Jan 15 16:56:09 lappi kernel: [  155.938043]                       [<ffffffff813c945d>] do_IRQ+0x4d/0xa5
+Jan 15 16:56:09 lappi kernel: [  155.938053]                       [<ffffffff813c07b2>] ret_from_intr+0x0/0x1a
+Jan 15 16:56:09 lappi kernel: [  155.938061]                       [<ffffffff81016a29>] cpu_idle+0xb1/0xf1
+Jan 15 16:56:09 lappi kernel: [  155.938071]                       [<ffffffff8139f9c7>] rest_init+0x12b/0x132
+Jan 15 16:56:09 lappi kernel: [  155.938079]                       [<ffffffff8182bb9b>] start_kernel+0x3b9/0x3c6
+Jan 15 16:56:09 lappi kernel: [  155.938090]                       [<ffffffff8182b2d6>] x86_64_start_reservations+0xb1/0xb5
+Jan 15 16:56:09 lappi kernel: [  155.938098]                       [<ffffffff8182b3d8>] x86_64_start_kernel+0xfe/0x10b
+Jan 15 16:56:09 lappi kernel: [  155.938106]     IN-SOFTIRQ-W at:
+Jan 15 16:56:09 lappi kernel: [  155.938111]                       [<ffffffff8108c747>] __lock_acquire+0x2cd/0xe6d
+Jan 15 16:56:09 lappi kernel: [  155.938118]                       [<ffffffff8108d7b1>] lock_acquire+0x9f/0x112
+Jan 15 16:56:09 lappi kernel: [  155.938125]                       [<ffffffff813bfbb8>] _raw_spin_lock+0x36/0x6b
+Jan 15 16:56:09 lappi kernel: [  155.938132]                       [<ffffffffa003526d>] ahci_interrupt+0x4b/0x59f [libahci]
+Jan 15 16:56:09 lappi kernel: [  155.938147]                       [<ffffffff810ba834>] handle_irq_event_percpu+0x40/0x1c7
+Jan 15 16:56:09 lappi kernel: [  155.938157]                       [<ffffffff810baa02>] handle_irq_event+0x47/0x69
+Jan 15 16:56:09 lappi kernel: [  155.938166]                       [<ffffffff810bd23c>] handle_edge_irq+0xb0/0xdd
+Jan 15 16:56:09 lappi kernel: [  155.938173]                       [<ffffffff81010d29>] handle_irq+0x128/0x135
+Jan 15 16:56:09 lappi kernel: [  155.938183]                       [<ffffffff813c945d>] do_IRQ+0x4d/0xa5
+Jan 15 16:56:09 lappi kernel: [  155.938191]                       [<ffffffff813c07b2>] ret_from_intr+0x0/0x1a
+Jan 15 16:56:09 lappi kernel: [  155.938199]                       [<ffffffff81049240>] __do_softirq+0x88/0x1f9
+Jan 15 16:56:09 lappi kernel: [  155.938210]                       [<ffffffff813c8bbc>] call_softirq+0x1c/0x30
+Jan 15 16:56:09 lappi kernel: [  155.938218]                       [<ffffffff81010d80>] do_softirq+0x4a/0xa2
+Jan 15 16:56:09 lappi kernel: [  155.938227]                       [<ffffffff810494c6>] irq_exit+0x51/0xad
+Jan 15 16:56:09 lappi kernel: [  155.938236]                       [<ffffffff813c9531>] smp_apic_timer_interrupt+0x7c/0x8a
+Jan 15 16:56:09 lappi kernel: [  155.938245]                       [<ffffffff813c8472>] apic_timer_interrupt+0x72/0x80
+Jan 15 16:56:09 lappi kernel: [  155.938253]                       [<ffffffff81016a29>] cpu_idle+0xb1/0xf1
+Jan 15 16:56:09 lappi kernel: [  155.938262]                       [<ffffffff8139f9c7>] rest_init+0x12b/0x132
+Jan 15 16:56:09 lappi kernel: [  155.938269]                       [<ffffffff8182bb9b>] start_kernel+0x3b9/0x3c6
+Jan 15 16:56:09 lappi kernel: [  155.938276]                       [<ffffffff8182b2d6>] x86_64_start_reservations+0xb1/0xb5
+Jan 15 16:56:09 lappi kernel: [  155.938284]                       [<ffffffff8182b3d8>] x86_64_start_kernel+0xfe/0x10b
+Jan 15 16:56:09 lappi kernel: [  155.938292]     INITIAL USE at:
+Jan 15 16:56:09 lappi kernel: [  155.938297]                      [<ffffffff8108c806>] __lock_acquire+0x38c/0xe6d
+Jan 15 16:56:09 lappi kernel: [  155.938304]                      [<ffffffff8108d7b1>] lock_acquire+0x9f/0x112
+Jan 15 16:56:09 lappi kernel: [  155.938311]                      [<ffffffff813c050d>] _raw_spin_lock_irqsave+0x4b/0x85
+Jan 15 16:56:09 lappi kernel: [  155.938319]                      [<ffffffffa00e1d8a>] ata_dev_init+0x37/0x92 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.938346]                      [<ffffffffa00e1e50>] ata_link_init+0x6b/0xad [libata]
+Jan 15 16:56:09 lappi kernel: [  155.938370]                      [<ffffffffa00e2526>] ata_port_alloc+0x1d3/0x1e3 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.938394]                      [<ffffffffa00e25e0>] ata_host_alloc+0xaa/0xe7 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.938416]                      [<ffffffffa00e2632>] ata_host_alloc_pinfo+0x15/0x9a [libata]
+Jan 15 16:56:09 lappi kernel: [  155.938438]                      [<ffffffffa0071825>] ahci_init_one+0x4ef/0x876 [ahci]
+Jan 15 16:56:09 lappi kernel: [  155.938452]                      [<ffffffff8120dcdc>] local_pci_probe+0x3e/0x66
+Jan 15 16:56:09 lappi kernel: [  155.938462]                      [<ffffffff8120df63>] pci_device_probe+0xc4/0xea
+Jan 15 16:56:09 lappi kernel: [  155.938470]                      [<ffffffff8129de1a>] driver_probe_device+0x9f/0x1ba
+Jan 15 16:56:09 lappi kernel: [  155.938482]                      [<ffffffff8129df88>] __driver_attach+0x53/0x74
+Jan 15 16:56:09 lappi kernel: [  155.938491]                      [<ffffffff8129c45c>] bus_for_each_dev+0x57/0x89
+Jan 15 16:56:09 lappi kernel: [  155.938500]                      [<ffffffff8129d8ee>] driver_attach+0x1e/0x20
+Jan 15 16:56:09 lappi kernel: [  155.938508]                      [<ffffffff8129d56d>] bus_add_driver+0xfe/0x223
+Jan 15 16:56:09 lappi kernel: [  155.938518]                      [<ffffffff8129e54c>] driver_register+0x93/0x119
+Jan 15 16:56:09 lappi kernel: [  155.938527]                      [<ffffffff8120d344>] __pci_register_driver+0x5f/0x64
+Jan 15 16:56:09 lappi kernel: [  155.938535]                      [<ffffffffa007801e>] joydev_correct+0x1e/0x56 [joydev]
+Jan 15 16:56:09 lappi kernel: [  155.938545]                      [<ffffffff810020d5>] do_one_initcall+0x7f/0x13a
+Jan 15 16:56:09 lappi kernel: [  155.938553]                      [<ffffffff81098b28>] sys_init_module+0x7f/0x1c2
+Jan 15 16:56:09 lappi kernel: [  155.938561]                      [<ffffffff813c7919>] system_call_fastpath+0x16/0x1b
+Jan 15 16:56:09 lappi kernel: [  155.938569]   }
+Jan 15 16:56:09 lappi kernel: [  155.938573]   ... key      at: [<ffffffffa00fa0f8>] __key.40747+0x0/0xffffffffffff6c93 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.938595]   ... acquired at:
+Jan 15 16:56:09 lappi kernel: [  155.938598]    [<ffffffff8108d7b1>] lock_acquire+0x9f/0x112
+Jan 15 16:56:09 lappi kernel: [  155.938605]    [<ffffffff813c050d>] _raw_spin_lock_irqsave+0x4b/0x85
+Jan 15 16:56:09 lappi kernel: [  155.938612]    [<ffffffffa0046123>] scsi_schedule_eh+0x1b/0x64 [scsi_mod]
+Jan 15 16:56:09 lappi kernel: [  155.938638]    [<ffffffffa00e6ea4>] ata_std_sched_eh+0x4f/0x54 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.938665]    [<ffffffffa00e73f2>] ata_port_schedule_eh+0x13/0x15 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.938690]    [<ffffffffa00e26fb>] __ata_port_probe+0x44/0x55 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.938713]    [<ffffffffa00e272e>] ata_port_probe+0x22/0x37 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.938734]    [<ffffffffa00e2778>] async_port_probe+0x35/0x51 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.938756]    [<ffffffff810668f3>] async_run_entry_fn+0xa4/0x150
+Jan 15 16:56:09 lappi kernel: [  155.938764]    [<ffffffff8105bb63>] process_one_work+0x1e7/0x3a2
+Jan 15 16:56:09 lappi kernel: [  155.938773]    [<ffffffff8105bfff>] worker_thread+0x126/0x1c4
+Jan 15 16:56:09 lappi kernel: [  155.938780]    [<ffffffff8105fd89>] kthread+0xb1/0xb9
+Jan 15 16:56:09 lappi kernel: [  155.938787]    [<ffffffff813c786c>] ret_from_fork+0x7c/0xb0
+Jan 15 16:56:09 lappi kernel: [  155.938794] 
+Jan 15 16:56:09 lappi kernel: [  155.938797] -> (&(shost->host_lock)->rlock){+.-...} ops: 36315 {
+Jan 15 16:56:09 lappi kernel: [  155.938810]    HARDIRQ-ON-W at:
+Jan 15 16:56:09 lappi kernel: [  155.938815]                     [<ffffffff8108ae5a>] mark_held_locks+0x71/0x99
+Jan 15 16:56:09 lappi kernel: [  155.938825]                     [<ffffffff8108b020>] trace_hardirqs_on_caller+0x19e/0x1ad
+Jan 15 16:56:09 lappi kernel: [  155.938835]                     [<ffffffff8108b03c>] trace_hardirqs_on+0xd/0xf
+Jan 15 16:56:09 lappi kernel: [  155.938844]                     [<ffffffffa02d0044>] usbip_hcd_giveback_urb+0x3f/0x48 [vhci_hcd]
+Jan 15 16:56:09 lappi kernel: [  155.938854]                     [<ffffffffa02d010a>] vhci_urb_dequeue+0xbd/0xce [vhci_hcd]
+Jan 15 16:56:09 lappi kernel: [  155.938863]                     [<ffffffffa000abac>] unlink1+0xcf/0xe2 [usbcore]
+Jan 15 16:56:09 lappi kernel: [  155.938890]                     [<ffffffffa000bc06>] usb_hcd_unlink_urb+0x66/0x87 [usbcore]
+Jan 15 16:56:09 lappi kernel: [  155.938914]                     [<ffffffffa000c3d3>] usb_unlink_urb+0x26/0x3c [usbcore]
+Jan 15 16:56:09 lappi kernel: [  155.938938]                     [<ffffffffa04e691f>] usb_stor_stop_transport+0x30/0x52 [usb_storage]
+Jan 15 16:56:09 lappi kernel: [  155.938949]                     [<ffffffffa04e5903>] command_abort+0x64/0x86 [usb_storage]
+Jan 15 16:56:09 lappi kernel: [  155.938958]                     [<ffffffffa0046a5a>] scsi_error_handler+0x2e4/0x5da [scsi_mod]
+Jan 15 16:56:09 lappi kernel: [  155.938983]                     [<ffffffff8105fd89>] kthread+0xb1/0xb9
+Jan 15 16:56:09 lappi kernel: [  155.938990]                     [<ffffffff813c786c>] ret_from_fork+0x7c/0xb0
+Jan 15 16:56:09 lappi kernel: [  155.938998]    IN-SOFTIRQ-W at:
+Jan 15 16:56:09 lappi kernel: [  155.939003]                     [<ffffffff8108c747>] __lock_acquire+0x2cd/0xe6d
+Jan 15 16:56:09 lappi kernel: [  155.939010]                     [<ffffffff8108d7b1>] lock_acquire+0x9f/0x112
+Jan 15 16:56:09 lappi kernel: [  155.939017]                     [<ffffffff813c050d>] _raw_spin_lock_irqsave+0x4b/0x85
+Jan 15 16:56:09 lappi kernel: [  155.939025]                     [<ffffffffa0048c5d>] scsi_device_unbusy+0x29/0xa2 [scsi_mod]
+Jan 15 16:56:09 lappi kernel: [  155.939049]                     [<ffffffffa0040db8>] scsi_finish_command+0x2a/0xf2 [scsi_mod]
+Jan 15 16:56:09 lappi kernel: [  155.939069]                     [<ffffffffa0048ef9>] scsi_softirq_done+0x106/0x10f [scsi_mod]
+Jan 15 16:56:09 lappi kernel: [  155.939092]                     [<ffffffff811dc5f8>] blk_done_softirq+0x7c/0x90
+Jan 15 16:56:09 lappi kernel: [  155.939101]                     [<ffffffff81049285>] __do_softirq+0xcd/0x1f9
+Jan 15 16:56:09 lappi kernel: [  155.939110]                     [<ffffffff810493d9>] run_ksoftirqd+0x28/0x4e
+Jan 15 16:56:09 lappi kernel: [  155.939118]                     [<ffffffff810677c4>] smpboot_thread_fn+0x134/0x150
+Jan 15 16:56:09 lappi kernel: [  155.939126]                     [<ffffffff8105fd89>] kthread+0xb1/0xb9
+Jan 15 16:56:09 lappi kernel: [  155.939133]                     [<ffffffff813c786c>] ret_from_fork+0x7c/0xb0
+Jan 15 16:56:09 lappi kernel: [  155.939141]    INITIAL USE at:
+Jan 15 16:56:09 lappi kernel: [  155.939145]                    [<ffffffff8108c806>] __lock_acquire+0x38c/0xe6d
+Jan 15 16:56:09 lappi kernel: [  155.939153]                    [<ffffffff8108d7b1>] lock_acquire+0x9f/0x112
+Jan 15 16:56:09 lappi kernel: [  155.939159]                    [<ffffffff813c050d>] _raw_spin_lock_irqsave+0x4b/0x85
+Jan 15 16:56:09 lappi kernel: [  155.939167]                    [<ffffffffa0046123>] scsi_schedule_eh+0x1b/0x64 [scsi_mod]
+Jan 15 16:56:09 lappi kernel: [  155.939189]                    [<ffffffffa00e6ea4>] ata_std_sched_eh+0x4f/0x54 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.939216]                    [<ffffffffa00e73f2>] ata_port_schedule_eh+0x13/0x15 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.939242]                    [<ffffffffa00e26fb>] __ata_port_probe+0x44/0x55 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.939265]                    [<ffffffffa00e272e>] ata_port_probe+0x22/0x37 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.939287]                    [<ffffffffa00e2778>] async_port_probe+0x35/0x51 [libata]
+Jan 15 16:56:09 lappi kernel: [  155.939309]                    [<ffffffff810668f3>] async_run_entry_fn+0xa4/0x150
+Jan 15 16:56:09 lappi kernel: [  155.939317]                    [<ffffffff8105bb63>] process_one_work+0x1e7/0x3a2
+Jan 15 16:56:09 lappi kernel: [  155.939325]                    [<ffffffff8105bfff>] worker_thread+0x126/0x1c4
+Jan 15 16:56:09 lappi kernel: [  155.939333]                    [<ffffffff8105fd89>] kthread+0xb1/0xb9
+Jan 15 16:56:09 lappi kernel: [  155.939340]                    [<ffffffff813c786c>] ret_from_fork+0x7c/0xb0
+Jan 15 16:56:09 lappi kernel: [  155.939347]  }
+Jan 15 16:56:09 lappi kernel: [  155.939351]  ... key      at: [<ffffffffa0064528>] __key.30654+0x0/0xfffffffffffea5e7 [scsi_mod]
+Jan 15 16:56:09 lappi kernel: [  155.939372]  ... acquired at:
+Jan 15 16:56:09 lappi kernel: [  155.939375]    [<ffffffff8108a4b0>] check_usage_backwards+0x85/0x96
+Jan 15 16:56:09 lappi kernel: [  155.939385]    [<ffffffff8108aca7>] mark_lock+0x105/0x247
+Jan 15 16:56:09 lappi kernel: [  155.939393]    [<ffffffff8108ae5a>] mark_held_locks+0x71/0x99
+Jan 15 16:56:09 lappi kernel: [  155.939402]    [<ffffffff8108b020>] trace_hardirqs_on_caller+0x19e/0x1ad
+Jan 15 16:56:09 lappi kernel: [  155.939411]    [<ffffffff8108b03c>] trace_hardirqs_on+0xd/0xf
+Jan 15 16:56:09 lappi kernel: [  155.939420]    [<ffffffffa02d0044>] usbip_hcd_giveback_urb+0x3f/0x48 [vhci_hcd]
+Jan 15 16:56:09 lappi kernel: [  155.939429]    [<ffffffffa02d010a>] vhci_urb_dequeue+0xbd/0xce [vhci_hcd]
+Jan 15 16:56:09 lappi kernel: [  155.939437]    [<ffffffffa000abac>] unlink1+0xcf/0xe2 [usbcore]
+Jan 15 16:56:09 lappi kernel: [  155.939461]    [<ffffffffa000bc06>] usb_hcd_unlink_urb+0x66/0x87 [usbcore]
+Jan 15 16:56:09 lappi kernel: [  155.939483]    [<ffffffffa000c3d3>] usb_unlink_urb+0x26/0x3c [usbcore]
+Jan 15 16:56:09 lappi kernel: [  155.939506]    [<ffffffffa04e691f>] usb_stor_stop_transport+0x30/0x52 [usb_storage]
+Jan 15 16:56:09 lappi kernel: [  155.939517]    [<ffffffffa04e5903>] command_abort+0x64/0x86 [usb_storage]
+Jan 15 16:56:09 lappi kernel: [  155.939526]    [<ffffffffa0046a5a>] scsi_error_handler+0x2e4/0x5da [scsi_mod]
+Jan 15 16:56:09 lappi kernel: [  155.939548]    [<ffffffff8105fd89>] kthread+0xb1/0xb9
+Jan 15 16:56:09 lappi kernel: [  155.939554]    [<ffffffff813c786c>] ret_from_fork+0x7c/0xb0
+Jan 15 16:56:09 lappi kernel: [  155.939561] 
+Jan 15 16:56:09 lappi kernel: [  155.939565] 
+Jan 15 16:56:09 lappi kernel: [  155.939565] stack backtrace:
+Jan 15 16:56:09 lappi kernel: [  155.939573] Pid: 5034, comm: scsi_eh_6 Tainted: G           O 3.7.2+ #17
+Jan 15 16:56:09 lappi kernel: [  155.939577] Call Trace:
+Jan 15 16:56:09 lappi kernel: [  155.939588]  [<ffffffff813b9471>] print_irq_inversion_bug.part.32+0x1a1/0x1b0
+Jan 15 16:56:09 lappi kernel: [  155.939599]  [<ffffffff8108a4b0>] check_usage_backwards+0x85/0x96
+Jan 15 16:56:09 lappi kernel: [  155.939610]  [<ffffffff8108a42b>] ? print_shortest_lock_dependencies+0x185/0x185
+Jan 15 16:56:09 lappi kernel: [  155.939620]  [<ffffffff8108aca7>] mark_lock+0x105/0x247
+Jan 15 16:56:09 lappi kernel: [  155.939630]  [<ffffffff8108ae5a>] mark_held_locks+0x71/0x99
+Jan 15 16:56:09 lappi kernel: [  155.939640]  [<ffffffffa02d0044>] ? usbip_hcd_giveback_urb+0x3f/0x48 [vhci_hcd]
+Jan 15 16:56:09 lappi kernel: [  155.939650]  [<ffffffff8108b020>] trace_hardirqs_on_caller+0x19e/0x1ad
+Jan 15 16:56:09 lappi kernel: [  155.939660]  [<ffffffff8108b03c>] trace_hardirqs_on+0xd/0xf
+Jan 15 16:56:09 lappi kernel: [  155.939669]  [<ffffffffa02d0044>] usbip_hcd_giveback_urb+0x3f/0x48 [vhci_hcd]
+Jan 15 16:56:09 lappi kernel: [  155.939678]  [<ffffffffa02d010a>] vhci_urb_dequeue+0xbd/0xce [vhci_hcd]
+Jan 15 16:56:09 lappi kernel: [  155.939704]  [<ffffffffa000abac>] unlink1+0xcf/0xe2 [usbcore]
+Jan 15 16:56:09 lappi kernel: [  155.939732]  [<ffffffffa000bc06>] usb_hcd_unlink_urb+0x66/0x87 [usbcore]
+Jan 15 16:56:09 lappi kernel: [  155.939758]  [<ffffffffa000c3d3>] usb_unlink_urb+0x26/0x3c [usbcore]
+Jan 15 16:56:09 lappi kernel: [  155.939769]  [<ffffffffa04e691f>] usb_stor_stop_transport+0x30/0x52 [usb_storage]
+Jan 15 16:56:09 lappi kernel: [  155.939779]  [<ffffffffa04e5903>] command_abort+0x64/0x86 [usb_storage]
+Jan 15 16:56:09 lappi kernel: [  155.939806]  [<ffffffffa0046a5a>] scsi_error_handler+0x2e4/0x5da [scsi_mod]
+Jan 15 16:56:09 lappi kernel: [  155.939832]  [<ffffffffa0046776>] ? scsi_eh_get_sense+0x185/0x185 [scsi_mod]
+Jan 15 16:56:09 lappi kernel: [  155.939840]  [<ffffffff8105fd89>] kthread+0xb1/0xb9
+Jan 15 16:56:09 lappi kernel: [  155.939849]  [<ffffffff8105fcd8>] ? __kthread_parkme+0x65/0x65
+Jan 15 16:56:09 lappi kernel: [  155.939857]  [<ffffffff813c786c>] ret_from_fork+0x7c/0xb0
+Jan 15 16:56:09 lappi kernel: [  155.939865]  [<ffffffff8105fcd8>] ? __kthread_parkme+0x65/0x65
+Jan 15 16:56:09 lappi kernel: [  155.939929] scsi 6:0:0:0: Device offlined - not ready after error recovery
+
